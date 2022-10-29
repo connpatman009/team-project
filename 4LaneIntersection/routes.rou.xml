@@ -21,6 +21,10 @@
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vType id="EMS" guiShape="emergency" color="1,0,0 "/>
+    <vehicle id="EMS_1" type="EMS" depart="0.00">
+        <route edges="EastToWest_In EastToWest_Out"/>
+    </vehicle>
     <vehicle id="0" depart="0.00">
         <route edges="SouthToNorth_In EastToWest_Out"/>
     </vehicle>

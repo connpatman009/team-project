@@ -6,7 +6,7 @@ Use randomtrips.py to generate a series of trips
 Use duarouter to generate routes
 	-n "network_name.net.xml"
 	--route-files "trips_name.trips.xml"
-	-o "output_name.rou.xml
+	-o "output_name.rou.xml"
 	--no-warnings
 	--ignore-errors
 Use one of the generated files as a template for the sim file (sim_name.sumo.cfg)
