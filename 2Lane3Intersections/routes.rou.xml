@@ -849,6 +849,9 @@
     <vehicle id="399" depart="399.00">
         <route edges="-E6 -E2 E0 E7"/>
     </vehicle>
+    <vehicle id="EMS_3" type="EMS" depart="400.00">
+        <route edges="-E9 -E0 E2 E4"/>
+    </vehicle>
     <vehicle id="400" depart="400.00">
         <route edges="-E3 E1"/>
     </vehicle>
