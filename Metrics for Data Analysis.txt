@@ -1,0 +1,4 @@
+Relative speed of vehicle compared to speed limit
+Get the avg of everyone
+Calculate time loss from EMS vehicle
+Calculate time loss from other vehicles
