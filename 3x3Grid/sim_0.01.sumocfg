@@ -5,11 +5,12 @@
 	<input>
 		<net-file value="network.net.xml"/>
 		<route-files value = "routes_0.01.rou.xml"/>
+		<additional-files value="edge_0.01.add.xml"/>
 	</input>
 
 	<time>
 		<begin value="0"/>
-		<end value="3500"/>
+		<end value="1000"/>
 	</time>
 
 </configuration>
