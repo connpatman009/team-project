@@ -39,5 +39,5 @@
     <flow id="f_7" begin="0.00" from="-E9" to="E8" via="E2" end="1000.00" period="15"/>
     <flow id="f_8" begin="0.00" from="E10" to="-E1" end="1000.00" period="15"/>
     <flow id="f_9" begin="0.00" from="E10" to="E9" end="1000.00" period="15"/>
-    <trip id="t_0" type="EMS_VEHICLE" depart="100.00" from="E1" to="E4" via="E2 E3"/>
+    <trip id="t_0" type="EMS_VEHICLE" depart="50.00" from="E1" to="E4" via="E2 E3"/>
 </routes>
