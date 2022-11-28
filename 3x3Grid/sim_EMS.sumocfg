@@ -4,12 +4,8 @@
 
 	<input>
 		<net-file value="network.net.xml"/>
-<<<<<<< Updated upstream:3x3Grid/sim_EMS.sumocfg
 		<route-files value = "routes_EMS.rou.xml"/>
 		<additional-files value="additionals_EMS.add.xml"/>
-=======
-		<route-files value = "routes_0.01.rou.xml"/>
->>>>>>> Stashed changes:3x3Grid/network_sim.sumo.cfg
 	</input>
 
 	<time>
