@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2022-11-28 13:26:28 by Eclipse SUMO netedit Version 1.14.1
+<!-- generated on 2022-11-28 14:05:33 by Eclipse SUMO netedit Version 1.14.1
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
     <!-- VTypes -->
-    <vType id="EMS_Vehicle" speedFactor="normc(1.50,0.00)" vClass="emergency" guiShape="emergency" jmDriveAfterRedTime="300" jmDriveRedSpeed="5.56" jmIgnoreFoeSpeed="10.0" jmIgnoreFoeProb="1.0">
+    <vType id="DEFAULT_VEHTYPE"/>
+    <vType id="EMS_Vehicle" speedFactor="normc(1.50,0.00)" vClass="emergency" impatience="1.00" guiShape="emergency" lcKeepRight="0.0" lcSublane="0.0" lcPushy="1.0" lcOvertakeRight="1.0" jmDriveAfterYellowTime="300" jmDriveAfterRedTime="300" jmDriveRedSpeed="13.89" jmIgnoreKeepClearTime="0" jmIgnoreFoeSpeed="20.0" jmIgnoreFoeProb="1.0">
         <param key="has.bluelight.device" value="true"/>
     </vType>
     <!-- Vehicles, persons and containers (sorted by depart) -->
@@ -132,5 +133,5 @@
     <flow id="f_97" begin="0.00" departLane="random" from="-E13" to="E7" end="150.00" probability="0.04"/>
     <flow id="f_98" begin="0.00" departLane="random" from="-E13" to="E22" end="150.00" probability="0.04"/>
     <flow id="f_99" begin="0.00" departLane="random" from="-E13" to="E23" end="150.00" probability="0.04"/>
-    <trip id="t_0" type="EMS_Vehicle" depart="110.00" departLane="1" from="-E3" to="E14"/>
+    <trip id="t_0" type="EMS_Vehicle" depart="120.00" departLane="1" from="-E3" to="E14"/>
 </routes>
