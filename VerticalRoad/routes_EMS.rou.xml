@@ -4,6 +4,10 @@
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="EMS_VEHICLE" speedFactor="normc(1.50,0.00)" vClass="emergency" impatience="1.00" guiShape="emergency" lcKeepRight="0.0" lcSublane="0.0" lcPushy="1.0" lcImpatience="10" lcOvertakeRight="1.0" jmDriveAfterYellowTime="300" jmDriveAfterRedTime="300" jmDriveRedSpeed="13.89" jmIgnoreKeepClearTime="0" jmIgnoreFoeSpeed="20.0" jmIgnoreFoeProb="1.0">
+        <param key="has.bluelight.device" value="true"/>
+    </vType>
     <!-- Vehicles, persons and containers (sorted by depart) -->
     <flow id="f_0" begin="0.00" departLane="random" from="E1" to="E9" end="100.00" period="12.00"/>
     <flow id="f_1" begin="0.00" departLane="random" from="E1" to="E7" via="E2" end="100.00" period="12.00"/>
@@ -35,4 +39,5 @@
     <flow id="f_7" begin="0.00" departLane="random" from="-E9" to="E8" via="E2" end="100.00" period="12.00"/>
     <flow id="f_8" begin="0.00" departLane="random" from="E10" to="-E1" end="100.00" period="12.00"/>
     <flow id="f_9" begin="0.00" departLane="random" from="E10" to="E9" end="100.00" period="12.00"/>
+    <trip id="t_0" type="EMS_VEHICLE" depart="55.00" departLane="1" from="E1" to="E4" via="E2 E3"/>
 </routes>
