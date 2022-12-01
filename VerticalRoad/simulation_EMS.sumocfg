@@ -3,18 +3,18 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
 
 	<input>
-		<net-file value="network.net.xml"/>
-		<route-files value = "routes_NOEMS.rou.xml"/>
-		<additional-files value="additionals_NOEMS.add.xml"/>
+		<net-file value="verticalNetwork.net.xml"/>
+		<route-files value = "routes_EMS.rou.xml"/>
+		<additional-files value="additionals_EMS.add.xml"/>
 	</input>
 
 	<time>
 		<begin value="0"/>
-		<end value="1000"/>
+		<end value="320"/>
 	</time>
 
 	<processing>
-		<lateral-resolution value="1.8"/>
+		<lateral-resolution value="0.5"/>
 	</processing>
 
 </configuration>
