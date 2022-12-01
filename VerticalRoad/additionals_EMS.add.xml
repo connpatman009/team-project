@@ -2,8 +2,10 @@
 
 <additional>
 
-	<edgeData id="EMSData" file=".\data\edgeData_EMS" vTypes="EMS_Vehicle" excludeEmpty="true"/>
+	<edgeData id="EMSData" file=".\data\edgeData_EMS" vTypes="EMS_VEHICLE" excludeEmpty="true"/>
 	<edgeData id="OtherData" file=".\data\edgeData_EMS" vTypes="DEFAULT_VEHTYPE" excludeEmpty="true"/>
-	<edgeData id="AllData" file =".\data\edgeData_EMS" vTypes="DEFAULT_VEHTYPE EMS_Vehicle" excludeEmpty="true"/>
+	<edgeData id="AllData" file =".\data\edgeData_EMS" vTypes="DEFAULT_VEHTYPE EMS_VEHICLE" excludeEmpty="true"/>
+	<inductionLoop id="det0" lane="E1_0" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
+	<inductionLoop id="det1" lane="E1_1" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
 
 </additional>
