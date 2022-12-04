@@ -5,13 +5,29 @@
 	<edgeData id="EMSData" file=".\data\edgeData_EMS" vTypes="EMS_VEHICLE" excludeEmpty="true"/>
 	<edgeData id="OtherData" file=".\data\edgeData_EMS" vTypes="DEFAULT_VEHTYPE" excludeEmpty="true"/>
 	<edgeData id="AllData" file =".\data\edgeData_EMS" vTypes="DEFAULT_VEHTYPE EMS_VEHICLE" excludeEmpty="true"/>
-	<inductionLoop id="det1_0" lane="E1_0" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det1_1" lane="E1_1" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det2_0" lane="E2_0" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det2_1" lane="E2_1" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det3_0" lane="E3_0" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det3_1" lane="E3_1" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det4_0" lane="E4_0" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
-	<inductionLoop id="det4_1" lane="E4_1" pos="10" file=".\data\detectorData" vTypes="EMS_VEHICLE"/>
+	<entryExitDetector id="det1" file=".\data\detectorData" vTypes="EMS_VEHICLE">
+		<detEntry lane="E1_0" pos="10"/>
+		<detEntry lane="E1_1" pos="10"/>
+		<detExit lane="E1_0" pos="15"/>
+		<detExit lane="E1_1" pos="15"/>
+	</entryExitDetector>
+	<entryExitDetector id="det2" file=".\data\detectorData" vTypes="EMS_VEHICLE">
+		<detEntry lane="E2_0" pos="10"/>
+		<detEntry lane="E2_1" pos="10"/>
+		<detExit lane="E2_0" pos="15"/>
+		<detExit lane="E2_1" pos="15"/>
+	</entryExitDetector>
+	<entryExitDetector id="det3" file=".\data\detectorData" vTypes="EMS_VEHICLE">
+		<detEntry lane="E3_0" pos="10"/>
+		<detEntry lane="E3_1" pos="10"/>
+		<detExit lane="E3_0" pos="15"/>
+		<detExit lane="E3_1" pos="15"/>
+	</entryExitDetector>
+	<entryExitDetector id="det4" file=".\data\detectorData" vTypes="EMS_VEHICLE">
+		<detEntry lane="E4_0" pos="10"/>
+		<detEntry lane="E4_1" pos="10"/>
+		<detExit lane="E4_0" pos="15"/>
+		<detExit lane="E4_1" pos="15"/>
+	</entryExitDetector>
 
 </additional>
