@@ -89,7 +89,7 @@ def perform_reaction_time_experiment(min_reaction_time=0, max_reaction_time=25, 
     for i in range(min_reaction_time, max_reaction_time, increment):
         
         # TraCI starts sumo as a subprocess and then this script connects and runs
-        traci.start(["sumo", "-c", FILENAME])
+        traci.start(["sumo-gui", "-c", FILENAME])
         time = run_reaction_simulation(bluelight_reaction_time=float(i))
         x.append(i)
         y.append(time)
@@ -114,7 +114,7 @@ def perform_reaction_time_experiment(min_reaction_time=0, max_reaction_time=25, 
 # Main
 if __name__ == "__main__":
     options = get_options()
-    FILENAME = "simulation.sumocfg"
+    FILENAME = "simulation_EMS.sumocfg"
 
     # check binary
     if options.nogui:
@@ -128,7 +128,9 @@ if __name__ == "__main__":
                 "tripinfo.xml"
             ]
 
-    perform_reaction_time_experiment(10, 15, 1)
+    traci.start(["sumo-gui", "-c", FILENAME])
+    run_reaction_simulation(bluelight_reaction_time=float(50))
+    # perform_reaction_time_experiment(20, 50, 5)
     
 
     
