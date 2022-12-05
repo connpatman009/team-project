@@ -19,48 +19,56 @@ def get_options():
     options, args = opt_parser.parse_args()
     return options
 
-# RETURNS TRUE IF THERE IS AN ACTIVE BLUE LIGHT DEVICE IN VEH_ID_LIST
-def isEMSPresent(veh_id_list):
-    for vehID in veh_id_list:
-            if traci.vehicle.getParameterWithKey(vehID, "has.bluelight.device")[1] == 'true':
-                return True
-    return False
+# // --- TRAFFIC LIGHT POLICIES --- //
+# EMS POLICY
+def ems_policy(intersection_id):
+    pass
+# NORMAL POLICY
+def normal_policy(intersection_id):
+    pass
 
 # BASE TRACI CONTROL LOOP
 def run():
     step = 0
     print(traci.trafficlight.getIDList())
+    print(traci.multientryexit.getIDList())
+    hit_1 = False
+    hit_2 = False
+    hit_3 = False
+    hit_4 = False
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()
         # DO TRACI THINGS HERE
+        in_det_1 = traci.multientryexit.getLastStepVehicleNumber('det1')
+        in_det_2 = traci.multientryexit.getLastStepVehicleNumber('det2')
+        in_det_3 = traci.multientryexit.getLastStepVehicleNumber('det3')
+        in_det_4 = traci.multientryexit.getLastStepVehicleNumber('det4')
+        if in_det_1:
+            hit_1 = True
+        if in_det_2:
+            hit_2 = True
+        if in_det_3:
+            hit_3 = True
+        if in_det_4:
+            hit_4 = True
+        
+        # At this point, hit_X will be true if EMS has hit detector X, so
+        if hit_1 and not hit_2:
+            # Set intersection 1 to policy
+            pass
+        elif hit_2 and not hit_3:
+            # Return intersection 1 to normal
+            # Set intersection 2 to policy
+            pass
+        elif hit_3 and not hit_4:
+            # Return intersection 2 to normal
+            # Set intersection 3 to policy
+            pass
+        elif hit_4:
+            # Return intersection 3 to normal
+            pass
+            
 
-        # These det booleans will be true if the detector was just tripped last step
-        det1_0 = traci.inductionloop.getTimeSinceDetection('det1_0') == 0
-        det1_1 = traci.inductionloop.getTimeSinceDetection('det1_1') == 0
-        det2_0 = traci.inductionloop.getTimeSinceDetection('det2_0') == 0
-        det2_1 = traci.inductionloop.getTimeSinceDetection('det2_1') == 0
-        det3_0 = traci.inductionloop.getTimeSinceDetection('det3_0') == 0
-        det3_1 = traci.inductionloop.getTimeSinceDetection('det3_1') == 0
-        det4_0 = traci.inductionloop.getTimeSinceDetection('det4_0') == 0
-        det4_1 = traci.inductionloop.getTimeSinceDetection('det4_1') == 0
-
-        # If the detector was tripped last step, print its ID
-        if det1_0:
-            print("det1_0")
-        if det1_1:
-            print("det1_1")
-        if det2_0:
-            print("det2_0")
-        if det2_1:
-            print("det2_1")
-        if det3_0:
-            print("det3_0")
-        if det3_1:
-            print("det3_1")
-        if det4_0:
-            print("det4_0")
-        if det4_1:
-            print("det4_1")
 
         step += 1
     traci.close()
