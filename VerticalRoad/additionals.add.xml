@@ -38,16 +38,16 @@
 		<detExit lane="E1_1" pos="75"/>
 	</entryExitDetector>
 	<entryExitDetector id="det2_NEAR" file=".\data\detectorData" vTypes="EMS_VEHICLE">
-		<detEntry lane="E2_0" pos="70"/>
-		<detEntry lane="E2_1" pos="70"/>
-		<detExit lane="E2_0" pos="75"/>
-		<detExit lane="E2_1" pos="75"/>
+		<detEntry lane="E2_0" pos="60"/>
+		<detEntry lane="E2_1" pos="60"/>
+		<detExit lane="E2_0" pos="65"/>
+		<detExit lane="E2_1" pos="65"/>
 	</entryExitDetector>
 	<entryExitDetector id="det3_NEAR" file=".\data\detectorData" vTypes="EMS_VEHICLE">
-		<detEntry lane="E3_0" pos="70"/>
-		<detEntry lane="E3_1" pos="70"/>
-		<detExit lane="E3_0" pos="75"/>
-		<detExit lane="E3_1" pos="75"/>
+		<detEntry lane="E3_0" pos="60"/>
+		<detEntry lane="E3_1" pos="60"/>
+		<detExit lane="E3_0" pos="65"/>
+		<detExit lane="E3_1" pos="65"/>
 	</entryExitDetector>
 	<entryExitDetector id="det4_NEAR" file=".\data\detectorData" vTypes="EMS_VEHICLE">
 		<detEntry lane="E4_0" pos="70"/>
