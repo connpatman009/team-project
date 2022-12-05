@@ -143,11 +143,11 @@ def run_all_policies_experiment(sumo_gui, FILENAME):
     print('Running NORMAL policy (no traffic light manipulation)...')
     na_ems_steps, na_total_steps = run(sumo_gui, FILENAME, 'na')
 
-    print('\n\n----------------- RESULTS -----------------\n')
+    print('\n\n---------------- RESULTS ----------------\n')
     print('GREEN CORRIDOR:\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(gc_ems_steps, gc_total_steps))
     print('RED FREEZE:\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(rf_ems_steps, rf_total_steps))
     print('CONTROL (no traffic light manipulation):\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(na_ems_steps, na_total_steps))
-    print('-------------------------------------------\n')
+    print('-----------------------------------------\n')
 # Main
 if __name__ == "__main__":
 
@@ -178,5 +178,6 @@ if __name__ == "__main__":
             sumo_gui = 'sumo-gui'
         else:
             sumo_gui = 'sumo'
-        policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
-        run(sumo_gui, FILENAME, policty_type)
+            policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
+            EMSTravelTime, TotalCongestionClearingTime = run(sumo_gui, FILENAME, policty_type)
+            print('\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(EMSTravelTime, TotalCongestionClearingTime))
