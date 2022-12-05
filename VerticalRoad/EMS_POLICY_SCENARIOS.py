@@ -152,7 +152,7 @@ def run_all_policies_experiment(sumo_gui, FILENAME):
 if __name__ == "__main__":
 
     options = get_options()
-    FILENAME = "simulation_EMS.sumocfg"
+    FILENAME = "simulation.sumocfg"
 
     # check binary
     if options.nogui:
