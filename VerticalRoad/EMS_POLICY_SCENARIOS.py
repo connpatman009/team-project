@@ -196,7 +196,7 @@ def run_all_policies_experiment(sumo_gui, FILENAMES):
     print('{}:\n'.format(FILENAMES[0]))
     print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_gc_ems_steps, light_gc_total_steps))
     print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_rf_ems_steps, light_rf_total_steps))
-    print('\tCONTROL (no traffic light manipulation):\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(light_na_ems_steps, light_na_total_steps))
+    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_na_ems_steps, light_na_total_steps))
 
     print('{}:\n'.format(FILENAMES[1]))
     print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_gc_ems_steps, average_gc_total_steps))
