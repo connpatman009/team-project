@@ -178,6 +178,6 @@ if __name__ == "__main__":
             sumo_gui = 'sumo-gui'
         else:
             sumo_gui = 'sumo'
-            policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
-            EMSTravelTime, TotalCongestionClearingTime = run(sumo_gui, FILENAME, policty_type)
-            print('\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(EMSTravelTime, TotalCongestionClearingTime))
+        policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
+        EMSTravelTime, TotalCongestionClearingTime = run(sumo_gui, FILENAME, policty_type)
+        print('\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(EMSTravelTime, TotalCongestionClearingTime))
