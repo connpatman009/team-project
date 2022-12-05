@@ -21,16 +21,31 @@ def get_options():
 
 # // --- TRAFFIC LIGHT POLICIES --- //
 # EMS POLICY
-def ems_policy(intersection_id):
-    pass
+def ems_policy(type, intersection_id):
+
+    # Green Corridor (Turn EMS lanes for intersection green)
+    if type == 'gc':
+        # TODO: IMPLEMENT GREEN CORRIDOR
+        return
+    # Red Freeze (Turn all lights for intersection red)
+    elif type == 'rf':
+        # TODO: IMPLEMENT RED FREEZE
+        return
+    # Normal policy (No traffic light manipulation)
+    elif type == 'na':
+        # DO NOTHING HERE
+        pass
+    else:
+        raise Exception("You did not enter a valid EMS-policy type. Please re-run with one of the following options:\n\n<gc (green corridor) | rf (red freeze) | na (normal lights)>")
+
 # NORMAL POLICY
-def normal_policy(intersection_id):
+def return_to_normal(intersection_id):
     pass
 
 # BASE TRACI CONTROL LOOP
-def run():
+def run(policy_type):
     step = 0
-    print(traci.trafficlight.getIDList())
+    intersection_ids = traci.trafficlight.getIDList())
     print(traci.multientryexit.getIDList())
     hit_1 = False
     hit_2 = False
@@ -54,18 +69,24 @@ def run():
         
         # At this point, hit_X will be true if EMS has hit detector X, so
         if hit_1 and not hit_2:
-            # Set intersection 1 to policy
+            # Set intersection 1 to ems policy
+            ems_policy(policy_type, intersection_ids[0])
             pass
         elif hit_2 and not hit_3:
             # Return intersection 1 to normal
-            # Set intersection 2 to policy
+            # Set intersection 2 to ems policy
+            return_to_normal(intersection_ids[0])
+            ems_policy(policy_type, intersection_ids[1])
             pass
         elif hit_3 and not hit_4:
             # Return intersection 2 to normal
-            # Set intersection 3 to policy
+            # Set intersection 3 to ems policy
+            return_to_normal(intersection_ids[1])
+            ems_policy(policy_type, intersection_ids[2])
             pass
         elif hit_4:
             # Return intersection 3 to normal
+            return_to_normal(intersection_ids[2])
             pass
             
 
@@ -77,6 +98,8 @@ def run():
 
 # Main
 if __name__ == "__main__":
+
+    policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n")
     options = get_options()
     FILENAME = "simulation_EMS.sumocfg"
 
@@ -93,4 +116,4 @@ if __name__ == "__main__":
             ]
 
     traci.start(["sumo-gui", "-c", FILENAME])
-    run()
+    run(policty_type)
