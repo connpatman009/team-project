@@ -4,7 +4,7 @@
 
 	<input>
 		<net-file value="verticalNetwork.net.xml"/>
-		<route-files value = "routes.rou.xml"/>
+		<route-files value = "routes_HEAVY.rou.xml"/>
 		<additional-files value="additionals.add.xml"/>
 	</input>
 
@@ -15,6 +15,7 @@
 
 	<processing>
 		<lateral-resolution value="0.5"/>
+		<random value="true"/>		<!-- Set to false for repeated simulations -->
 	</processing>
 
 </configuration>
