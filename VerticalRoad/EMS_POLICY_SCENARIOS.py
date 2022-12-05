@@ -19,6 +19,13 @@ def get_options():
     options, args = opt_parser.parse_args()
     return options
 
+# Returns whether or not an EMS vehicle is present in the simulation
+def isEMSPresent(veh_id_list):
+    for vehID in veh_id_list:
+            if traci.vehicle.getParameterWithKey(vehID, "has.bluelight.device")[1] == 'true':
+                return True
+    return False
+
 # // --- TRAFFIC LIGHT POLICIES --- //
 # EMS POLICY
 def ems_policy(type, intersection_id):
@@ -59,27 +66,34 @@ intersection_J5_phases.append(traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy", 0,
 intersection_J5_phases.append(traci.trafficlight.Phase(42, "GGGgrrrrGGGgrrrr", 0, 0))
 intersection_J5_phases.append(traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr", 0, 0))
 
+int_to_phases_map = {   'J3' : intersection_J3_phases,
+                        'J4' : intersection_J4_phases,
+                        'J5' : intersection_J5_phases   }
+
 # NORMAL POLICY
 def return_to_normal(intersection_id):
-
-    int_to_phases_map = {   'J3' : intersection_J3_phases,
-                            'J4' : intersection_J4_phases,
-                            'J5' : intersection_J5_phases   }
-
     logic = traci.trafficlight.Logic("custom", 0, 0, int_to_phases_map[intersection_id])
     traci.trafficlight.setCompleteRedYellowGreenDefinition(intersection_id, logic)
     traci.trafficlight.setPhase(intersection_id, 0)
 
 # BASE TRACI CONTROL LOOP
-def run(policy_type):
+def run(sumo_gui, FILENAME, policy_type):
+    traci.start([sumo_gui, "-c", FILENAME])
     step = 0
     intersection_ids = traci.trafficlight.getIDList()
     hit_1 = False
     hit_2 = False
     hit_3 = False
     hit_4 = False
+
+    already_hit = False
+
+    count_EMS_time_steps = 0
+
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()
+        if(isEMSPresent(traci.vehicle.getIDList())):
+            count_EMS_time_steps += 1
         # DO TRACI THINGS HERE
         in_det_1 = traci.multientryexit.getLastStepVehicleNumber('det1')
         in_det_2 = traci.multientryexit.getLastStepVehicleNumber('det2')
@@ -111,22 +125,32 @@ def run(policy_type):
             return_to_normal(intersection_ids[1])
             ems_policy(policy_type, intersection_ids[2])
             pass
-        elif hit_4:
+        elif hit_4 and not already_hit:
             # Return intersection 3 to normal
             return_to_normal(intersection_ids[2])
+            already_hit = True
             pass
-            
-
-
         step += 1
     traci.close()
     sys.stdout.flush()
-    pass
+    return count_EMS_time_steps, step
 
+def run_all_policies_experiment(sumo_gui, FILENAME):
+    print('Running GREEN CORRIDOR policy...')
+    gc_ems_steps, gc_total_steps = run(sumo_gui, FILENAME, 'gc')
+    print('Running RED FREEZE policy...')
+    rf_ems_steps, rf_total_steps = run(sumo_gui, FILENAME, 'rf')
+    print('Running NORMAL policy (no traffic light manipulation)...')
+    na_ems_steps, na_total_steps = run(sumo_gui, FILENAME, 'na')
+
+    print('\n\n----------------- RESULTS -----------------\n')
+    print('GREEN CORRIDOR:\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(gc_ems_steps, gc_total_steps))
+    print('RED FREEZE:\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(rf_ems_steps, rf_total_steps))
+    print('CONTROL (no traffic light manipulation):\nEMS travel time = {} steps\nCongestion clearing time = {} steps\n'.format(na_ems_steps, na_total_steps))
+    print('-------------------------------------------\n')
 # Main
 if __name__ == "__main__":
 
-    policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
     options = get_options()
     FILENAME = "simulation_EMS.sumocfg"
 
@@ -142,5 +166,17 @@ if __name__ == "__main__":
                 "tripinfo.xml"
             ]
 
-    traci.start(["sumo-gui", "-c", FILENAME])
-    run(policty_type)
+    user_input = input("\nRun auto-experiment? [Y/N]\n\n")
+        
+    if user_input.lower() == 'y':
+        sumo_gui = 'sumo'
+        run_all_policies_experiment(sumo_gui, FILENAME)
+        pass
+    else:
+        sumo_gui = input("\nRun sumo-gui? [Y/N]\n\n")
+        if sumo_gui.lower() == 'y':
+            sumo_gui = 'sumo-gui'
+        else:
+            sumo_gui = 'sumo'
+        policty_type = input("\nPlease type your preffered policy: <gc (green corridor) | rf (red freeze) | na (normal lights)>\n\n")
+        run(sumo_gui, FILENAME, policty_type)
