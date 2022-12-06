@@ -87,11 +87,11 @@ def run(sumo_gui, FILENAME, policy_type):
         print("FREEEEEEEEEEEEEEEZE BREAK = 250")
         freeze_break = 250
     elif "MEDIUM" in FILENAME:
-        print("FREEEEEEEEEEEEEEEZE BREAK = 300")
-        freeze_break = 300
-    elif "HEAVY" in FILENAME:
         print("FREEEEEEEEEEEEEEEZE BREAK = 400")
         freeze_break = 400
+    elif "HEAVY" in FILENAME:
+        print("FREEEEEEEEEEEEEEEZE BREAK = 750")
+        freeze_break = 750
     else:
         raise Exception("Should never hit...")
 
