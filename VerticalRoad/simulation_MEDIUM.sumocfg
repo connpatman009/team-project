@@ -4,7 +4,7 @@
 
 	<input>
 		<net-file value="verticalNetwork.net.xml"/>
-		<route-files value = "routes_AVERAGE.rou.xml"/>
+		<route-files value = "routes_MEDIUM.rou.xml"/>
 		<additional-files value="additionals.add.xml"/>
 	</input>
 

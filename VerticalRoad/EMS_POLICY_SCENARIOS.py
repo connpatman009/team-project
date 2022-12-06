@@ -84,14 +84,14 @@ def run(sumo_gui, FILENAME, policy_type):
     freeze_break = 0
 
     if "LIGHT" in FILENAME:
+        print("FREEEEEEEEEEEEEEEZE BREAK = 250")
+        freeze_break = 250
+    elif "MEDIUM" in FILENAME:
         print("FREEEEEEEEEEEEEEEZE BREAK = 300")
         freeze_break = 300
-    elif "AVERAGE" in FILENAME:
+    elif "HEAVY" in FILENAME:
         print("FREEEEEEEEEEEEEEEZE BREAK = 400")
         freeze_break = 400
-    elif "HEAVY" in FILENAME:
-        print("FREEEEEEEEEEEEEEEZE BREAK = 800")
-        freeze_break = 800
     else:
         raise Exception("Should never hit...")
 
@@ -180,9 +180,9 @@ def run(sumo_gui, FILENAME, policy_type):
         step+=1
         # Attempts to redo gridlocked simulations
         if step > freeze_break:
+            print('////BREAKING//// {}'.format(traci.vehicle.getIDCount()))
             traci.close()
             sys.stdout.flush()
-            print('////BREAKING////')
             count_EMS_time_steps, step = run(sumo_gui, FILENAME, policy_type)
             return count_EMS_time_steps, step
     traci.close()
@@ -190,7 +190,7 @@ def run(sumo_gui, FILENAME, policy_type):
 
     # Attempts to redo gridlocked simulations
     if step > freeze_break:
-        print('////BREAKING////')
+        print('////BREAKING//// {}'.format(traci.vehicle.getIDCount()))
         count_EMS_time_steps, step = run(sumo_gui, FILENAME, policy_type)
         return count_EMS_time_steps, step
     else:
@@ -306,7 +306,7 @@ def run_all_policies_experiment(sumo_gui, FILENAMES):
 if __name__ == "__main__":
 
     options = get_options()
-    FILENAMES = ["simulation_LIGHT.sumocfg", "simulation_AVERAGE.sumocfg", "simulation_HEAVY.sumocfg"]
+    FILENAMES = ["simulation_LIGHT.sumocfg", "simulation_MEDIUM.sumocfg", "simulation_HEAVY.sumocfg"]
 
     # check binary
     if options.nogui:
