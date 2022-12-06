@@ -47,24 +47,24 @@ def ems_policy(type, intersection_id):
     
 # Define traffic light phases
 intersection_J3_phases = []
-intersection_J3_phases.append(traci.trafficlight.Phase(42, "GGGgrrrrGGGgrrrr", 0, 0))
-intersection_J3_phases.append(traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr", 0, 0))
 intersection_J3_phases.append(traci.trafficlight.Phase(42, "rrrrGGGgrrrrGGGg", 0, 0))
 intersection_J3_phases.append(traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy", 0, 0))
+intersection_J3_phases.append(traci.trafficlight.Phase(42, "GGGgrrrrGGGgrrrr", 0, 0))
+intersection_J3_phases.append(traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr", 0, 0))
 
 intersection_J4_phases = []
-intersection_J4_phases.append(traci.trafficlight.Phase(36, "GGGgrrrrGGGgrrrr", 0, 0))
-intersection_J4_phases.append(traci.trafficlight.Phase(6, "yyyGrrrryyyGrrrr", 0, 0))
-intersection_J4_phases.append(traci.trafficlight.Phase(3, "rrryrrrrrrryrrrr", 0, 0))
 intersection_J4_phases.append(traci.trafficlight.Phase(36, "rrrrGGGgrrrrGGGg", 0, 0))
 intersection_J4_phases.append(traci.trafficlight.Phase(6, "rrrryyyGrrrryyyG", 0, 0))
 intersection_J4_phases.append(traci.trafficlight.Phase(3, "rrrrrrryrrrrrrry", 0, 0))
+intersection_J4_phases.append(traci.trafficlight.Phase(36, "GGGgrrrrGGGgrrrr", 0, 0))
+intersection_J4_phases.append(traci.trafficlight.Phase(6, "yyyGrrrryyyGrrrr", 0, 0))
+intersection_J4_phases.append(traci.trafficlight.Phase(3, "rrryrrrrrrryrrrr", 0, 0))
 
 intersection_J5_phases = []
-intersection_J5_phases.append(traci.trafficlight.Phase(42, "rrrrGGGgrrrrGGGg", 0, 0))
-intersection_J5_phases.append(traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy", 0, 0))
 intersection_J5_phases.append(traci.trafficlight.Phase(42, "GGGgrrrrGGGgrrrr", 0, 0))
 intersection_J5_phases.append(traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr", 0, 0))
+intersection_J5_phases.append(traci.trafficlight.Phase(42, "rrrrGGGgrrrrGGGg", 0, 0))
+intersection_J5_phases.append(traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy", 0, 0))
 
 int_to_phases_map = {   'J3' : intersection_J3_phases,
                         'J4' : intersection_J4_phases,
@@ -80,7 +80,20 @@ def return_to_normal(intersection_id):
 def run(sumo_gui, FILENAME, policy_type):
     traci.start([sumo_gui, "-c", FILENAME])
     step = 0
-    intersection_ids = traci.trafficlight.getIDList()
+
+    freeze_break = 0
+
+    if "LIGHT" in FILENAME:
+        print("FREEEEEEEEEEEEEEEZE BREAK = 300")
+        freeze_break = 300
+    elif "AVERAGE" in FILENAME:
+        print("FREEEEEEEEEEEEEEEZE BREAK = 400")
+        freeze_break = 400
+    elif "HEAVY" in FILENAME:
+        print("FREEEEEEEEEEEEEEEZE BREAK = 800")
+        freeze_break = 800
+    else:
+        raise Exception("Should never hit...")
 
     det1_FAR    = False
     det1_NEAR   = False
@@ -165,48 +178,129 @@ def run(sumo_gui, FILENAME, policy_type):
         else:
             raise Exception("{} is not a valid policy...".format(policy_type))
         step+=1
+        # Attempts to redo gridlocked simulations
+        if step > freeze_break:
+            traci.close()
+            sys.stdout.flush()
+            print('////BREAKING////')
+            count_EMS_time_steps, step = run(sumo_gui, FILENAME, policy_type)
+            return count_EMS_time_steps, step
     traci.close()
     sys.stdout.flush()
-    return count_EMS_time_steps, step
+
+    # Attempts to redo gridlocked simulations
+    if step > freeze_break:
+        print('////BREAKING////')
+        count_EMS_time_steps, step = run(sumo_gui, FILENAME, policy_type)
+        return count_EMS_time_steps, step
+    else:
+        return count_EMS_time_steps, step
 
 def run_all_policies_experiment(sumo_gui, FILENAMES):
 
-    print('Running GREEN CORRIDOR policy...')
-    light_gc_ems_steps, light_gc_total_steps = run(sumo_gui, FILENAMES[0], 'gc')
-    print('Running RED FREEZE policy...')
-    light_rf_ems_steps, light_rf_total_steps = run(sumo_gui, FILENAMES[0], 'rf')
-    print('Running NORMAL policy (no traffic light manipulation)...')
-    light_na_ems_steps, light_na_total_steps = run(sumo_gui, FILENAMES[0], 'na')
+    iterations = 10
 
-    print('Running GREEN CORRIDOR policy...')
-    average_gc_ems_steps, average_gc_total_steps = run(sumo_gui, FILENAMES[1], 'gc')
-    print('Running RED FREEZE policy...')
-    average_rf_ems_steps, average_rf_total_steps = run(sumo_gui, FILENAMES[1], 'rf')
-    print('Running NORMAL policy (no traffic average manipulation)...')
-    average_na_ems_steps, average_na_total_steps = run(sumo_gui, FILENAMES[1], 'na')
+    light_gc_ems_total = 0
+    light_gc_cong_total = 0
+    light_rf_ems_total = 0
+    light_rf_cong_total = 0
+    light_na_ems_total = 0
+    light_na_cong_total = 0
+    average_gc_ems_total = 0
+    average_gc_cong_total = 0
+    average_rf_ems_total = 0
+    average_rf_cong_total = 0
+    average_na_ems_total = 0
+    average_na_cong_total = 0
+    heavy_gc_ems_total = 0
+    heavy_gc_cong_total = 0
+    heavy_rf_ems_total = 0
+    heavy_rf_cong_total = 0
+    heavy_na_ems_total = 0
+    heavy_na_cong_total = 0
 
-    print('Running GREEN CORRIDOR policy...')
-    heavy_gc_ems_steps, heavy_gc_total_steps = run(sumo_gui, FILENAMES[2], 'gc')
-    print('Running RED FREEZE policy...')
-    heavy_rf_ems_steps, heavy_rf_total_steps = run(sumo_gui, FILENAMES[2], 'rf')
-    print('Running NORMAL policy (no traffic light manipulation)...')
-    heavy_na_ems_steps, heavy_na_total_steps = run(sumo_gui, FILENAMES[2], 'na')
+    for i in range(iterations):
+        print('Running GREEN CORRIDOR policy...')
+        light_gc_ems_steps, light_gc_cong_steps = run(sumo_gui, FILENAMES[0], 'gc')
+        light_gc_ems_total += light_gc_ems_steps
+        light_gc_cong_total += light_gc_cong_steps
+        print('Running RED FREEZE policy...')
+        light_rf_ems_steps, light_rf_cong_steps = run(sumo_gui, FILENAMES[0], 'rf')
+        light_rf_ems_total += light_rf_ems_steps
+        light_rf_cong_total += light_rf_cong_steps
+        print('Running NORMAL policy (no traffic light manipulation)...')
+        light_na_ems_steps, light_na_cong_steps = run(sumo_gui, FILENAMES[0], 'na')
+        light_na_ems_total += light_na_ems_steps
+        light_na_cong_total += light_na_cong_steps
 
-    print('\n\n---------------- RESULTS ----------------\n')
+    for i in range(iterations):
+        print('Running GREEN CORRIDOR policy...')
+        average_gc_ems_steps, average_gc_cong_steps = run(sumo_gui, FILENAMES[1], 'gc')
+        average_gc_ems_total += average_gc_ems_steps
+        average_gc_cong_total += average_gc_cong_steps
+        print('Running RED FREEZE policy...')
+        average_rf_ems_steps, average_rf_cong_steps = run(sumo_gui, FILENAMES[1], 'rf')
+        average_rf_ems_total += average_rf_ems_steps
+        average_rf_cong_total += average_rf_cong_steps
+        print('Running NORMAL policy (no traffic average manipulation)...')
+        average_na_ems_steps, average_na_cong_steps = run(sumo_gui, FILENAMES[1], 'na')
+        average_na_ems_total += average_na_ems_steps
+        average_na_cong_total += average_na_cong_steps
+
+    for i in range(iterations):
+        print('Running GREEN CORRIDOR policy...')
+        heavy_gc_ems_steps, heavy_gc_cong_steps = run(sumo_gui, FILENAMES[2], 'gc')
+        heavy_gc_ems_total += heavy_gc_ems_steps
+        heavy_gc_cong_total += heavy_gc_cong_steps
+        print('Running RED FREEZE policy...')
+        heavy_rf_ems_steps, heavy_rf_cong_steps = run(sumo_gui, FILENAMES[2], 'rf')
+        heavy_rf_ems_total += heavy_rf_ems_steps
+        heavy_rf_cong_total += heavy_rf_cong_steps
+        print('Running NORMAL policy (no traffic light manipulation)...')
+        heavy_na_ems_steps, heavy_na_cong_steps = run(sumo_gui, FILENAMES[2], 'na')
+        heavy_na_ems_total += heavy_na_ems_steps
+        heavy_na_cong_total += heavy_na_cong_steps
+
+    light_gc_ems_average    = (int) (light_gc_ems_total / iterations)
+    light_rf_ems_average    = (int) (light_rf_ems_total / iterations)
+    light_na_ems_average    = (int) (light_na_ems_total / iterations)
+
+    light_gc_cong_average   = (int) (light_gc_cong_total / iterations)
+    light_rf_cong_average   = (int) (light_rf_cong_total / iterations)
+    light_na_cong_average   = (int) (light_na_cong_total / iterations)
+
+    average_gc_ems_average  = (int) (average_gc_ems_total / iterations)
+    average_rf_ems_average  = (int) (average_rf_ems_total / iterations)
+    average_na_ems_average  = (int) (average_na_ems_total / iterations)
+
+    average_gc_cong_average = (int) (average_gc_cong_total / iterations)
+    average_rf_cong_average = (int) (average_rf_cong_total / iterations)
+    average_na_cong_average = (int) (average_na_cong_total / iterations)
+
+    heavy_gc_ems_average    = (int) (heavy_gc_ems_total / iterations)
+    heavy_rf_ems_average    = (int) (heavy_rf_ems_total / iterations)
+    heavy_na_ems_average    = (int) (heavy_na_ems_total / iterations)
+
+    heavy_gc_cong_average   = (int) (heavy_gc_cong_total / iterations)
+    heavy_rf_cong_average   = (int) (heavy_rf_cong_total / iterations)
+    heavy_na_cong_average   = (int) (heavy_na_cong_total / iterations)
+
+
+    print('\n\n---------------- AVERAGE RESULTS ----------------\n')
     print('{}:\n'.format(FILENAMES[0]))
-    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_gc_ems_steps, light_gc_total_steps))
-    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_rf_ems_steps, light_rf_total_steps))
-    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_na_ems_steps, light_na_total_steps))
+    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_gc_ems_average, light_gc_cong_average))
+    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_rf_ems_average, light_rf_cong_average))
+    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(light_na_ems_average, light_na_cong_average))
 
     print('{}:\n'.format(FILENAMES[1]))
-    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_gc_ems_steps, average_gc_total_steps))
-    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_rf_ems_steps, average_rf_total_steps))
-    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_na_ems_steps, average_na_total_steps))
+    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_gc_ems_average, average_gc_cong_average))
+    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_rf_ems_average, average_rf_cong_average))
+    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(average_na_ems_average, average_na_cong_average))
 
     print('{}:\n'.format(FILENAMES[2]))
-    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_gc_ems_steps, heavy_gc_total_steps))
-    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_rf_ems_steps, heavy_rf_total_steps))
-    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_na_ems_steps, heavy_na_total_steps))
+    print('\tGREEN CORRIDOR:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_gc_ems_average, heavy_gc_cong_average))
+    print('\tRED FREEZE:\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_rf_ems_average, heavy_rf_cong_average))
+    print('\tCONTROL (no traffic light manipulation):\n\t\tEMS travel time = {} steps\n\t\tCongestion clearing time = {} steps\n'.format(heavy_na_ems_average, heavy_na_cong_average))
     print('-----------------------------------------\n')
 # Main
 if __name__ == "__main__":
