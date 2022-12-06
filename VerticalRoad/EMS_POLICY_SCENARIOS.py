@@ -138,13 +138,13 @@ def run(sumo_gui, FILENAME, policy_type):
             if not finished:
                 if det1_FAR and not det2_FAR:
                     ems_policy(policy_type, 'J3')
-                elif det2_FAR and not det3_FAR:
                     ems_policy(policy_type, 'J4')
+                    ems_policy(policy_type, 'J5')
+                elif det2_FAR and not det3_FAR:
                     if not J3_normaled:
                         return_to_normal('J3')
                         J3_normaled = True
                 elif det3_FAR and not det4_FAR:
-                    ems_policy(policy_type, 'J5')
                     if not J4_normaled:
                         return_to_normal('J4')
                         J4_normaled = True
